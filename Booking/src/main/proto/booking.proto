@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc.booking";
+option java_outer_classname = "BookingProto";
+
+import "google/protobuf/empty.proto";
+
+service BookingService {
+  rpc CreateBooking (GrpcBookingRequest) returns (GrpcBookingResponse);
+  rpc CancelBooking (GrpcCancelBookingRequest) returns (GrpcCancelBookingResponse);
+  rpc Order (GrpcOrderRequest) returns (GrpcOrderResponse);
+  rpc Payment (GrpcPaymentRequest) returns (GrpcPaymentResponse);
+  rpc GetAllEvents (google.protobuf.Empty) returns (GrpcEventsResponse);
+  rpc GetZonesByEvent (GrpcZonesRequest) returns (GrpcZonesResponse);
+  rpc GetSeatsByZone (GrpcSeatsRequest) returns (GrpcSeatsResponse);
+}
+
+message GrpcBookingRequest {
+  int64 userId = 1;
+  repeated int64 seatIds = 2;
+}
+
+message GrpcBookingResponse {
+  int64 bookingId = 1;
+  string status = 2;
+}
+
+message GrpcCancelBookingRequest {
+  int64 userId = 1;
+  int64 seatId = 2;
+}
+
+message GrpcCancelBookingResponse {
+  int64 bookingId = 1;
+  string status = 2;
+}
+
+message GrpcOrderRequest {
+  int64 userId = 1;
+  repeated int64 seatIds = 2;
+  int64 price = 3;
+}
+
+message GrpcOrderResponse {
+  int64 OrderId = 1;
+  string status = 2;
+}
+
+message GrpcPaymentRequest {
+  int64 orderId = 1;
+  string status = 2;
+  int64 totalPrice = 3;
+  repeated int64 seatIds = 4;
+}
+
+message GrpcPaymentResponse {
+  int64 OrderId = 1;
+  string status = 2;
+}
+
+message GrpcEvent {
+  int64 eventId = 1;
+  string eventName = 2;
+  string eventDate = 3;
+  string eventLocation = 4;
+}
+
+message GrpcEventsResponse {
+  repeated GrpcEvent events = 1;
+}
+
+message GrpcZonesRequest {
+  int64 eventId = 1;
+}
+
+message GrpcZone {
+  int64 zoneId = 1;
+  int64 price = 2;
+}
+
+message GrpcZonesResponse {
+  repeated GrpcZone zones = 1;
+}
+
+message GrpcSeatsRequest {
+  int64 zoneId = 1;
+}
+
+message GrpcSeat {
+  int64 seatId = 1;
+  string status = 2;
+}
+
+message GrpcSeatsResponse {
+  repeated GrpcSeat seats = 1;
+}
+
+

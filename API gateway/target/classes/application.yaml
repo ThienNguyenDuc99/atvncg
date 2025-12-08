@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+grpc:
+  client:
+#    auth-service:
+#      address: "static://localhost:9091"
+#      negotiationType: plaintext
+    booking-service:
+      address: "static://localhost:9091"
+      negotiationType: plaintext
+
+jwt:
+  secret: "a4f6c8d1e9b203178ab45cf9126d7f98a4f6c8d1e9b203178ab45cf9126d7f9"
+  expiration: 3600000
