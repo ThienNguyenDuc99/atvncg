@@ -281,6 +281,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
             response.addZones(
                     GrpcZone.newBuilder()
                             .setZoneId(z.getId())
+                            .setName(z.getName())
                             .setPrice(z.getPrice())
                             .build()
             );
