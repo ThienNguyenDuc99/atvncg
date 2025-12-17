@@ -64,6 +64,12 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
             result = 0; // failed
         }
 
+        if (result == 1) {
+            LOGGER.info("Booking SUCCESS for seats: " + seatIdsList);
+        } else {
+            LOGGER.info("Booking FAILED for seats: " + seatIdsList);
+        }
+
         responseObserver.onNext(result == 1 ?
                 GrpcBookingResponse.newBuilder()
                         .setStatus("SUCCESS")
@@ -157,7 +163,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         Order saved = orderRepository.save(order);
 
         if (saved.getId() != null) {
-            LOGGER.info("Lưu thành công, ID = " + saved.getId());
+            LOGGER.info("Lưu thành công, ID = " + saved.getId() + "cho cac ghe: " + request.getSeatIdsList());
             result = 1;
         } else {
             LOGGER.error("Lưu thất bại");
@@ -181,7 +187,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
     public void payment(GrpcPaymentRequest request,
                       StreamObserver<GrpcPaymentResponse> responseObserver) {
 
-        System.out.println("SERVER RECEIVED CREATE_ORDER"); // log check
+        System.out.println("SERVER RECEIVED CREATE_PAYMENT"); // log check
 
         Long orderId = request.getOrderId();
         String status = request.getStatus();
@@ -217,7 +223,8 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
             seatRepository.updateStatusByIds(listSeatIds, "BOOKED");
 
             LOGGER.info("Lưu thông tin payment cho Order ID = " + orderId);
-            LOGGER.info("Order ID = " + orderId + " đã được cập nhật trạng thái thành PAID.");
+            LOGGER.info("Order ID = " + orderId + " với  đã được cập nhật trạng thái thành PAID " +
+                    "cho các ghe: " + listSeatIds);
         }
         if (orderStatus.equals("PAID")) {
             LOGGER.info("Order ID = " + orderId + " đã được thanh toán trước đó.");
