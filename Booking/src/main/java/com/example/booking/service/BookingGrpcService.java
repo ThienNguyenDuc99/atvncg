@@ -220,7 +220,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
 
             paymentRepository.save(payment);
 
-            seatRepository.updateStatusByIds(listSeatIds, "BOOKED");
+            seatRepository.updateStatusByIds(listSeatIds, "BOOKED", orderId);
 
             LOGGER.info("Lưu thông tin payment cho Order ID = " + orderId);
             LOGGER.info("Order ID = " + orderId + " với  đã được cập nhật trạng thái thành PAID " +
