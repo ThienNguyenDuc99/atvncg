@@ -17,7 +17,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     @Modifying
     @Query(
             value = "UPDATE atvncg_business.seats " +
-                    "SET status = 'BOOKED', expire_time = NOW() + INTERVAL '1 minute' " +
+                    "SET status = 'LOCKED', expire_time = NOW() + INTERVAL '1 minute' " +
                     "WHERE id = :seatId",
             nativeQuery = true
     )
@@ -50,9 +50,10 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     List<Seat> findByZoneId(Long zoneId);
 
     @Modifying
-    @Query("UPDATE Seat s SET s.status = :status WHERE s.id IN :ids")
+    @Query("UPDATE Seat s SET s.status = :status, s.orderId = :orderId WHERE s.id IN :ids")
     int updateStatusByIds(@Param("ids") List<Long> ids,
-                          @Param("status") String status);
+                          @Param("status") String status,
+                          @Param("orderId") Long orderId);
 }
 
 //    @Transactional

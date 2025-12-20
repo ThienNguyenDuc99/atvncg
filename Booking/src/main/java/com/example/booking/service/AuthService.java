@@ -60,7 +60,10 @@ public class AuthService {
         userRepo.save(user);
 
         // 🔹 Sinh token
-        String token = jwtService.generateToken(user.getUsername());
+        String token = jwtService.generateToken(
+                user.getUserId(),
+                user.getUsername()
+        );
         return token != null;
     }
 
@@ -77,7 +80,10 @@ public class AuthService {
         }
 
         // 🔹 Sinh token
-        String token = jwtService.generateToken(found.getUsername());
+        String token = jwtService.generateToken(
+                found.getUserId(),
+                found.getUsername()
+        );
         return Map.of("token", token);
     }
 }

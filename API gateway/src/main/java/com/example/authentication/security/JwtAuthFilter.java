@@ -21,8 +21,8 @@ public class JwtAuthFilter extends OncePerRequestFilter{
     @Autowired
     private JwtUtil jwtService;
 
-//    @Autowired
-//    private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -41,13 +41,22 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 //            UserDetails user = userDetailsService.loadUserByUsername(username);
+
+// load lại user từ DB
+            UserDetails userDetails =
+                    userDetailsService.loadUserByUsername(username);
             if (jwtService.validateToken(token)) {
 //                UsernamePasswordAuthenticationToken authToken =
 //                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(username, null, null);
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
             }
         }
 

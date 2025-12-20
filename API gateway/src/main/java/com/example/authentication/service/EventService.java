@@ -76,6 +76,7 @@ public class EventService {
                         Map<String, Object> item = new HashMap<>();
                         item.put("zoneId", zone.getZoneId());
                         item.put("price", zone.getPrice());
+                        item.put("name", zone.getName());
                         return item;
                     })
                     .toList();

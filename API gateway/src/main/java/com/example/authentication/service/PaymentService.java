@@ -27,6 +27,7 @@ public class PaymentService {
         GrpcPaymentRequest grpcPaymentRequest = GrpcPaymentRequest.newBuilder()
                 .setOrderId(request.getOrderId())
                 .setStatus(request.getStatus())
+                .addAllSeatIds(request.getSeatIds())
                 .setTotalPrice(request.getTotalPrice())
                 .build();
 

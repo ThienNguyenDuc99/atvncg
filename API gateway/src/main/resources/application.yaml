@@ -13,3 +13,21 @@ grpc:
 jwt:
   secret: "a4f6c8d1e9b203178ab45cf9126d7f98a4f6c8d1e9b203178ab45cf9126d7f9"
   expiration: 3600000
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # có thể là none / validate / update / create / create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: atvncg_business  # 👈 Thêm dòng này để đặt schema mặc định

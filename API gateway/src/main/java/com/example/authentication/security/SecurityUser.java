@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SecurityUser implements UserDetails {
+    private Long userId;
     private String username;
     private String password;
 
@@ -25,6 +26,14 @@ public class SecurityUser implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
         // Hoặc:
         // return List.of(new SimpleGrantedAuthority(user.getRole()));
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override

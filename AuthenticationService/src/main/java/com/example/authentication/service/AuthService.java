@@ -35,7 +35,7 @@ public class AuthService {
     }
 
     private String hashPassword(String rawPassword, String salt) {
-        // Gộp password + salt rồi hash, ví dụ bằng SHA-256
+        // Gộp password + salt rồi hash, ví dụ bằng SHA-256 sfsdfsdfsd
         try {
             var digest = java.security.MessageDigest.getInstance("SHA-256");
             digest.update(salt.getBytes());
