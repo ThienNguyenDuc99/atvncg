@@ -55,10 +55,11 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         LOGGER.info("SERVER RECEIVED CREATE_BOOKING"); // log check
 
         List<Long> seatIdsList = request.getSeatIdsList();
+        Long userId = request.getUserId();
         int result = 0;
         try {
             for (Long seatId : seatIdsList) {
-                result = getResult(seatId, "Main-Thread");
+                result = getResult(seatId, userId, "Main-Thread");
             }
         } catch (Exception e) {
             // Log error
@@ -86,7 +87,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public int getResult(Long seatId, String thread) {
+    public int getResult(Long seatId, Long userId, String thread) {
         try {
             Seat seat = seatRepository.findById(seatId).orElse(null);
             String status = seat.getStatus();
@@ -98,11 +99,11 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
 //            }
             int result = 0;
             LocalDateTime now = LocalDateTime.now();
-            if (status.equals("Available") || (status.equals("Booked") &&
+            if (status.equals("Available") || (status.equals("BOOKED") &&
                     expireTime.isBefore(now))) {
                 result = seatRepository.bookSeat(seatId);
-                LOGGER.info(thread + " booked seat " + seatId
-                        + " result = " + result + " at " + now); // log check
+                LOGGER.info(thread + " BOOKED SEAT " + seatId
+                        + " RESULT = " + result + " AT " + now + " WITH " + userId); // log check
             }
             return result;
         } catch (CannotAcquireLockException ex) {
@@ -166,7 +167,8 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         Order saved = orderRepository.save(order);
 
         if (saved.getId() != null) {
-            LOGGER.info("Lưu thành công, ID = " + saved.getId() + "cho cac ghe: " + request.getSeatIdsList());
+            LOGGER.info("Notice: " + userId + " lưu thành công, ID = "
+                    + saved.getId() + " cho cac ghe: " + request.getSeatIdsList());
             result = 1;
         } else {
             LOGGER.error("Lưu thất bại");

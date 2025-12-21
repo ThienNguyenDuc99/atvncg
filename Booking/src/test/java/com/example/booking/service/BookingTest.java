@@ -15,14 +15,14 @@ public class BookingTest {
 
         Runnable task1 = () -> {
             try {
-                int result = bookingService.getResult(1L, "Thread-1");
+                int result = bookingService.getResult(1L, 1L,"Thread-1");
                 System.out.println("Thread-1 result = " + result);
             } catch (Exception e) { e.printStackTrace(); }
         };
 
         Runnable task2 = () -> {
             try {
-                int result = bookingService.getResult(1L, "Thread-2");
+                int result = bookingService.getResult(1L, 1L, "Thread-2");
                 System.out.println("Thread-2 result = " + result);
             } catch (Exception e) { e.printStackTrace(); }
         };
