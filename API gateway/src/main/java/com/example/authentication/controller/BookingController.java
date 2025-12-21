@@ -1,14 +1,17 @@
 package com.example.authentication.controller;
 
-import com.example.authentication.entity.User;
 import com.example.authentication.request.BookingRequest;
 import com.example.authentication.request.OrderRequest;
 import com.example.authentication.request.PaymentRequest;
-import com.example.authentication.request.RegisterRequest;
-import com.example.authentication.service.*;
+import com.example.authentication.security.SecurityUser;
+import com.example.authentication.service.BookingService;
+import com.example.authentication.service.EventService;
+import com.example.authentication.service.OrderService;
+import com.example.authentication.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,16 +38,30 @@ public class BookingController {
 
     @PostMapping("/booking")
     public Map<String, Object> booking(@RequestBody BookingRequest request) {
+        SecurityUser user = (SecurityUser)
+                SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getPrincipal();
+
+        Long userId = user.getUserId();
+        request.setUserId(userId);// ✅ LẤY ĐƯỢC userId
         return ResponseEntity.ok(bookingService.booking(request)).getBody();
     }
 
     @PostMapping("/order")
     public Map<String, Object> order(@RequestBody OrderRequest request) {
+        SecurityUser user = (SecurityUser)
+                SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getPrincipal();
+
+        Long userId = user.getUserId();
+        request.setUserId(userId);// ✅ LẤY ĐƯỢC userId
         return ResponseEntity.ok(orderService.order(request)).getBody();
     }
 
     @PostMapping("/payment")
-    public Map<String, Object> order(@RequestBody PaymentRequest request) {
+    public Map<String, Object> payment(@RequestBody PaymentRequest request) {
         return ResponseEntity.ok(paymentService.payment(request)).getBody();
     }
 
