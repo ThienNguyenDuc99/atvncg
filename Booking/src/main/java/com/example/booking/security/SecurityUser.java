@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class SecurityUser implements UserDetails {
+    private Long userId;
     private String username;
     private String password;
 
@@ -63,5 +64,13 @@ public class SecurityUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

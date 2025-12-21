@@ -28,6 +28,6 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: atvncg_business  # 👈 Thêm dòng này để đặt schema mặc định

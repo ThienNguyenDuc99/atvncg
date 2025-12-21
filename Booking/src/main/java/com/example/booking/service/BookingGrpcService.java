@@ -2,6 +2,7 @@ package com.example.booking.service;
 
 import com.example.booking.entity.*;
 import com.example.booking.repository.*;
+import com.example.booking.security.SecurityUser;
 import com.example.grpc.booking.*;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
@@ -9,7 +10,9 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,7 +105,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
                         + " result = " + result + " at " + now); // log check
             }
             return result;
-        } catch (org.springframework.dao.CannotAcquireLockException ex) {
+        } catch (CannotAcquireLockException ex) {
             // Concurrency conflict: Postgres 40001
             LOGGER.error(thread + " FAILED due to concurrency lock (40001)");
             return 0;
@@ -124,7 +127,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
             LOGGER.info(thread + " booked seat " + seatId
                     + " result = " + result + " at " + LocalDateTime.now()); // log check
             return result;
-        } catch (org.springframework.dao.CannotAcquireLockException ex) {
+        } catch (CannotAcquireLockException ex) {
             // Concurrency conflict: Postgres 40001
             LOGGER.error(thread + " FAILED due to concurrency lock (40001)");
             return 0;
@@ -186,8 +189,9 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void payment(GrpcPaymentRequest request,
                       StreamObserver<GrpcPaymentResponse> responseObserver) {
-
-        System.out.println("SERVER RECEIVED CREATE_PAYMENT"); // log check
+    Long userId = 0L;
+    try {
+        //TODO:: get userId by orderId
 
         Long orderId = request.getOrderId();
         String status = request.getStatus();
@@ -196,6 +200,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
 
 
         Optional<Order> order = orderRepository.findById(orderId);
+        
         String orderStatus;
         if (order.isEmpty()) {
             LOGGER.info("Order ID = " + orderId + " không tồn tại.");
@@ -208,6 +213,14 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
             return;
         } else {
             orderStatus = order.get().getStatus();
+            userId = order.get().getUserId();
+            System.out.println(
+                    "SERVER RECEIVED CREATE_PAYMENT AT "
+                            + LocalDateTime.now()
+                            + " FOR " + listSeatIds
+                            + " AND " + orderId
+                            + " AND " + userId
+            );
         }
         if (Objects.isNull(orderStatus) || orderStatus.equals("CREATED")) {
             orderRepository.updateStatusById(orderId, "PAID");
@@ -220,7 +233,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
 
             paymentRepository.save(payment);
 
-            seatRepository.updateStatusByIds(listSeatIds, "BOOKED", orderId);
+            seatRepository.updateStatusByIds(listSeatIds, "BOOKED", orderId, userId);
 
             LOGGER.info("Lưu thông tin payment cho Order ID = " + orderId);
             LOGGER.info("Order ID = " + orderId + " với  đã được cập nhật trạng thái thành PAID " +
@@ -244,6 +257,44 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
                         .build()
         );
         responseObserver.onCompleted();
+    } catch (CannotAcquireLockException e) {
+
+        // ⚠️ concurrency / lock / serialization failure
+        LOGGER.error("Concurrency error when payment", e);
+        long orderId = request.getOrderId();
+        List<Long> listSeatIds = request.getSeatIdsList();
+        LOGGER.error(
+                "ERROR WHEN PAYMENT AT "
+                        + LocalDateTime.now()
+                        + " FOR listSeatIds:" + listSeatIds
+                        + " AND orderId:" + orderId
+                        + " AND userId:" + userId
+        );
+
+        responseObserver.onNext(
+                GrpcPaymentResponse.newBuilder()
+                        .setStatus("FAIL")
+                        .build()
+        );
+        responseObserver.onCompleted();
+
+        // 👉 bắt buộc rollback
+        throw e;
+
+    } catch (Exception e) {
+
+        LOGGER.error("Unexpected error in payment()", e);
+
+        responseObserver.onNext(
+                GrpcPaymentResponse.newBuilder()
+                        .setStatus("FAILED")
+                        .build()
+        );
+        responseObserver.onCompleted();
+
+        // 👉 rollback toàn bộ transaction
+        throw e;
+        }
     }
 
     @Override
