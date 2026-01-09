@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc";
+option java_outer_classname = "SendQueueProto";
+
+service RequestTakerService {
+  rpc SendQueue (GrpcSendQueueRequest) returns (GrpcSendQueueResponse);
+}
+
+message GrpcSendQueueRequest {
+  int64 userId = 1;
+  string username = 2;
+}
+
+message GrpcSendQueueResponse {
+  int64 userId = 1;
+  string username = 2;
+  string status = 3;
+}
