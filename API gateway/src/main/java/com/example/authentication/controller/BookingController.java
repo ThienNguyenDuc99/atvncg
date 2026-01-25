@@ -6,6 +6,7 @@ import com.example.authentication.request.PaymentRequest;
 import com.example.authentication.security.SecurityUser;
 import com.example.authentication.service.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/business")
@@ -36,6 +38,8 @@ public class BookingController {
 
     @Autowired
     private RequestTakerService requestTakerService;
+
+    private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(BookingService.class);
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -113,17 +117,16 @@ public class BookingController {
     }
 
     @GetMapping(value = "/sse/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@RequestParam String token) {
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+    public SseEmitter subscribe(
+            @RequestParam String token,
+            @RequestParam String eventId,
+            @RequestParam String userId) {
 
-        try {
-            emitter.send(SseEmitter.event()
-                    .name("connected")
-                    .data("SSE connected"));
-        } catch (IOException e) {
-            emitter.completeWithError(e);
-        }
+        LOGGER.info("SSE subscribe: token={}, eventId={}, userId={}",
+                token, eventId, userId);
 
+        SseEmitter emitter = new SseEmitter(0L); // no timeout
+        // store emitter theo eventId + userId
         return emitter;
     }
 }
