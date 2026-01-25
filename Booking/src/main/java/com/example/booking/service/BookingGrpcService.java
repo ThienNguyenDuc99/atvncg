@@ -69,9 +69,9 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         }
 
         if (result == 1) {
-            LOGGER.info("Booking SUCCESS for seats: " + seatIdsList);
+            LOGGER.info("UserId: " + userId + ", Booking SUCCESS for seats: " + seatIdsList);
         } else {
-            LOGGER.info("Booking FAILED for seats: " + seatIdsList);
+            LOGGER.info("UserId: " + userId + ", Booking FAILED for seats: " + seatIdsList);
         }
 
         responseObserver.onNext(result == 1 ?
@@ -167,7 +167,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         Order saved = orderRepository.save(order);
 
         if (saved.getId() != null) {
-            LOGGER.info("Notice: " + userId + " lưu thành công, ID = "
+            LOGGER.info("UserId: " + userId + " lưu thành công, ID = "
                     + saved.getId() + " cho cac ghe: " + request.getSeatIdsList());
             result = 1;
         } else {
@@ -237,8 +237,8 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
 
             seatRepository.updateStatusByIds(listSeatIds, "BOOKED", orderId, userId);
 
-            LOGGER.info("Lưu thông tin payment cho Order ID = " + orderId);
-            LOGGER.info("Order ID = " + orderId + " với  đã được cập nhật trạng thái thành PAID " +
+//            LOGGER.info("Lưu thông tin payment cho Order ID = " + orderId);
+            LOGGER.info("UserId :" + userId + ", Order ID = " + orderId + " với  đã được cập nhật trạng thái thành PAID " +
                     "cho các ghe: " + listSeatIds);
         }
         if (orderStatus.equals("PAID")) {

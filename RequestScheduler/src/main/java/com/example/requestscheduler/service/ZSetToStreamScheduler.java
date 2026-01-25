@@ -65,30 +65,21 @@ public class ZSetToStreamScheduler {
 
             Object rawValue = item.getValue();
             double score = item.getScore();
+            String member;
 
-            RedisQueueObj obj;
+            if (rawValue instanceof String) {
+                member = rawValue.toString();
 
-            if (rawValue instanceof Map<?, ?> map) {
-                // JSON thuần → Map
-                obj = objectMapper.convertValue(map, RedisQueueObj.class);
-
-            } else if (rawValue instanceof RedisQueueObj redisObj) {
-                // fallback (trường hợp cũ)
-                obj = redisObj;
-
-            } else {
+            }  else {
                 log.warn("Unsupported redis value type: {}", rawValue.getClass());
                 continue;
             }
 
             Map<String, String> body = new HashMap<>();
-            String userId = String.valueOf(obj.getUserId().get(1));
-            String username = obj.getUsername();
-            body.put("userId", userId);
-            body.put("username", username);
+            body.put("member", member);
             body.put("scheduledTime", String.valueOf((long) score));
 
-            LOGGER.info("Send to Request Taker message with: {} + {}", userId, username);
+            LOGGER.info("Send to Request Taker message with: {}", member);
 
             redisTemplate.opsForStream().add(
                     StreamRecords.mapBacked(body).withStreamKey(streamKey)

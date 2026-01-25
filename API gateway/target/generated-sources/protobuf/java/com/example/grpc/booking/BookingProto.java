@@ -121,24 +121,25 @@ public final class BookingProto {
       "\022\021\n\teventDate\030\003 \001(\t\022\025\n\reventLocation\030\004 \001" +
       "(\t\"0\n\022GrpcEventsResponse\022\032\n\006events\030\001 \003(\013" +
       "2\n.GrpcEvent\"#\n\020GrpcZonesRequest\022\017\n\007even" +
-      "tId\030\001 \001(\003\")\n\010GrpcZone\022\016\n\006zoneId\030\001 \001(\003\022\r\n" +
-      "\005price\030\002 \001(\003\"-\n\021GrpcZonesResponse\022\030\n\005zon" +
-      "es\030\001 \003(\0132\t.GrpcZone\"\"\n\020GrpcSeatsRequest\022" +
-      "\016\n\006zoneId\030\001 \001(\003\"*\n\010GrpcSeat\022\016\n\006seatId\030\001 " +
-      "\001(\003\022\016\n\006status\030\002 \001(\t\"-\n\021GrpcSeatsResponse" +
-      "\022\030\n\005seats\030\001 \003(\0132\t.GrpcSeat2\252\003\n\016BookingSe" +
-      "rvice\022:\n\rCreateBooking\022\023.GrpcBookingRequ" +
-      "est\032\024.GrpcBookingResponse\022F\n\rCancelBooki" +
-      "ng\022\031.GrpcCancelBookingRequest\032\032.GrpcCanc" +
-      "elBookingResponse\022.\n\005Order\022\021.GrpcOrderRe" +
-      "quest\032\022.GrpcOrderResponse\0224\n\007Payment\022\023.G" +
-      "rpcPaymentRequest\032\024.GrpcPaymentResponse\022" +
-      ";\n\014GetAllEvents\022\026.google.protobuf.Empty\032" +
-      "\023.GrpcEventsResponse\0228\n\017GetZonesByEvent\022" +
-      "\021.GrpcZonesRequest\032\022.GrpcZonesResponse\0227" +
-      "\n\016GetSeatsByZone\022\021.GrpcSeatsRequest\032\022.Gr" +
-      "pcSeatsResponseB*\n\030com.example.grpc.book" +
-      "ingB\014BookingProtoP\001b\006proto3"
+      "tId\030\001 \001(\003\"7\n\010GrpcZone\022\016\n\006zoneId\030\001 \001(\003\022\r\n" +
+      "\005price\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\"-\n\021GrpcZonesR" +
+      "esponse\022\030\n\005zones\030\001 \003(\0132\t.GrpcZone\"\"\n\020Grp" +
+      "cSeatsRequest\022\016\n\006zoneId\030\001 \001(\003\"*\n\010GrpcSea" +
+      "t\022\016\n\006seatId\030\001 \001(\003\022\016\n\006status\030\002 \001(\t\"-\n\021Grp" +
+      "cSeatsResponse\022\030\n\005seats\030\001 \003(\0132\t.GrpcSeat" +
+      "2\252\003\n\016BookingService\022:\n\rCreateBooking\022\023.G" +
+      "rpcBookingRequest\032\024.GrpcBookingResponse\022" +
+      "F\n\rCancelBooking\022\031.GrpcCancelBookingRequ" +
+      "est\032\032.GrpcCancelBookingResponse\022.\n\005Order" +
+      "\022\021.GrpcOrderRequest\032\022.GrpcOrderResponse\022" +
+      "4\n\007Payment\022\023.GrpcPaymentRequest\032\024.GrpcPa" +
+      "ymentResponse\022;\n\014GetAllEvents\022\026.google.p" +
+      "rotobuf.Empty\032\023.GrpcEventsResponse\0228\n\017Ge" +
+      "tZonesByEvent\022\021.GrpcZonesRequest\032\022.GrpcZ" +
+      "onesResponse\0227\n\016GetSeatsByZone\022\021.GrpcSea" +
+      "tsRequest\032\022.GrpcSeatsResponseB*\n\030com.exa" +
+      "mple.grpc.bookingB\014BookingProtoP\001b\006proto" +
+      "3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -216,7 +217,7 @@ public final class BookingProto {
     internal_static_GrpcZone_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_GrpcZone_descriptor,
-        new java.lang.String[] { "ZoneId", "Price", });
+        new java.lang.String[] { "ZoneId", "Price", "Name", });
     internal_static_GrpcZonesResponse_descriptor =
       getDescriptor().getMessageTypes().get(12);
     internal_static_GrpcZonesResponse_fieldAccessorTable = new

@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)   // TẮT BASIC AUTH
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/sse/**").permitAll()
 //                        .requestMatchers("/business/**").permitAll()
                         .anyRequest().authenticated()
                 )
