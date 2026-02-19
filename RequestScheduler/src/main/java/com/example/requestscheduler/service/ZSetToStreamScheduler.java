@@ -66,17 +66,25 @@ public class ZSetToStreamScheduler {
             Object rawValue = item.getValue();
             double score = item.getScore();
             String member;
+            String userId;
+            String eventId;
+            String traceId;
 
             if (rawValue instanceof String) {
                 member = rawValue.toString();
-
+                String[] parts = member.split(":", 3); // limit = 3 để traceId giữ nguyên
+                userId = parts[0];
+                eventId = parts[1];
+                traceId = parts[2];
             }  else {
                 log.warn("Unsupported redis value type: {}", rawValue.getClass());
                 continue;
             }
 
             Map<String, String> body = new HashMap<>();
-            body.put("member", member);
+            body.put("userId", userId);
+            body.put("eventId", eventId);
+            body.put("traceId", traceId);
             body.put("scheduledTime", String.valueOf((long) score));
 
             LOGGER.info("Send to Request Taker message with: {}", member);

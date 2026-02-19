@@ -25,13 +25,14 @@ public class SendQueueGrpcService
             String username = request.getUsername();
             Long userId = request.getUserId();
             Long eventId = request.getEventId();
+            String traceId = request.getTraceId();
 
 //            // ✅ ADD TO REDIS ZSET
 //            Map<String, Object> payload = new HashMap<>();
 //            payload.put("userId", userId);
 //            payload.put("username", username);
 //            payload.put("eventId", eventId);
-            String member = userId + ":" + eventId;
+            String member = userId + ":" + eventId + ":" + traceId;
 
             redisQueueService.addToQueue(member);
             long rank = redisQueueService.getRank(member);
@@ -41,6 +42,7 @@ public class SendQueueGrpcService
                     .setUserId(userId)
                     .setEventId(eventId)
                     .setStatus("SUCCESS")
+                    .setRank(rank)
                     .build();
 
             responseObserver.onNext(response);

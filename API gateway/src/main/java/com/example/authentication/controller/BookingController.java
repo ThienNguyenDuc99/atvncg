@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.UUID;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -103,9 +104,11 @@ public class BookingController {
 
         Long userId = user.getUserId();
         String username = user.getUsername();
+        // TODO: using config in this case
         if (1 == 1) {
+            String traceId = UUID.randomUUID().toString() + "-" + (int)(Math.random() * 10000);
             return ResponseEntity.ok(requestTakerService
-                    .sendQueue(userId, username, eventId)).getBody();
+                    .sendQueue(userId, username, eventId, traceId)).getBody();
         } else {
             return eventService.getZonesByEvent(eventId);
         }

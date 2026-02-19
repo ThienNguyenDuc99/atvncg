@@ -12,6 +12,7 @@ message GrpcSendQueueRequest {
   int64 userId = 1;
   string username = 2;
   int64 eventId = 3;
+  string traceId = 4;
 }
 
 message GrpcSendQueueResponse {
