@@ -40,9 +40,9 @@ public class ZSetToStreamScheduler {
          
              if first and second then
          
-                 local userId = string.sub(member, 1, first - 1)
+                 local userId = string.sub(member, 2, first - 1)
                  local eventId = string.sub(member, first + 1, second - 1)
-                 local traceId = string.sub(member, second + 1)
+                 local traceId = string.sub(member, second + 1, -2)
          
                  redis.call('XADD', stream, '*',
                      'userId', userId,
