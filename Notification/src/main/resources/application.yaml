@@ -1,0 +1,10 @@
+spring:
+  data:
+    redis:
+      port: 6379
+      host: 192.168.23.130
+      timeout: 2000ms
+      stream:
+        key: request_stream
+        group: notification_group
+        consumer: notification_1

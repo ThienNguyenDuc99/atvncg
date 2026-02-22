@@ -1,12 +1,5 @@
 server:
-  port: 8083
-
-grpc:
-  server:
-    port: 9093
-    in-process-name: request-taker-service
-    security:
-      enabled: false  # ⬅️ Tắt bảo mật gRPC
+  port: 8084
 
 
 spring:
@@ -30,11 +23,11 @@ spring:
       port: 6379
       host: 192.168.23.130
       timeout: 2000ms
-#      stream:
-#        key: request_stream
-#        group: request_taker_group
-#        consumer: request_taker_1
 
+
+scheduler:
+  zset-key: request_queue
+  stream-key: request_stream
 
 jwt:
   secret: "a4f6c8d1e9b203178ab45cf9126d7f98a4f6c8d1e9b203178ab45cf9126d7f9"

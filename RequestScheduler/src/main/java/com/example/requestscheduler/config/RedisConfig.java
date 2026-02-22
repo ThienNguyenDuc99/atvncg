@@ -20,25 +20,39 @@ public class RedisConfig {
                 .build();
     }
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(
-            RedisConnectionFactory factory) {
+//    @Bean
+//    public RedisTemplate<String, Object> redisTemplate(
+//            RedisConnectionFactory factory) {
+//
+//        RedisTemplate<String, Object> template = new RedisTemplate<>();
+//        template.setConnectionFactory(factory);
+//
+//        ObjectMapper mapper = JsonMapper.builder()
+//                .findAndAddModules()
+//                .build();
+//
+//        Jackson2JsonRedisSerializer<Object> serializer =
+//                new Jackson2JsonRedisSerializer<>(Object.class);
+//        serializer.setObjectMapper(mapper);
+//
+//        template.setKeySerializer(new StringRedisSerializer());
+//        template.setValueSerializer(serializer);
+//        template.setHashValueSerializer(serializer);
+//
+//        return template;
+//    }
 
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
 
-        ObjectMapper mapper = JsonMapper.builder()
-                .findAndAddModules()
-                .build();
-
-        Jackson2JsonRedisSerializer<Object> serializer =
-                new Jackson2JsonRedisSerializer<>(Object.class);
-        serializer.setObjectMapper(mapper);
-
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(serializer);
-        template.setHashValueSerializer(serializer);
+        template.setValueSerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new StringRedisSerializer());
 
+        template.afterPropertiesSet();
         return template;
     }
 
