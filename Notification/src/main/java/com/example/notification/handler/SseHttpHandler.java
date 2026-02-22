@@ -1,13 +1,11 @@
 package com.example.notification.handler;
 
-import com.example.notification.service.PendingEventStore;
 import com.example.notification.service.SseConnectionManager;
 import com.example.notification.utils.SseEncoder;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +23,7 @@ public class SseHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 
         // TODO: why dont get on concurrent hashmap???
         LOGGER.info("receive sse connection from FE with traceId {}", traceId);
-        System.out.println("receive sse connection from FE with traceId: " + traceId);
+        System.out.println("1. receive sse connection from FE with traceId: " + traceId);
 //        String pending = PendingEventStore.pop(traceId);
         boolean isReady = SseConnectionManager.isReadyStatusConnection(traceId);
 //        boolean isConnectionExist = SseConnectionManager.isContainConnection(traceId);
@@ -44,10 +42,14 @@ public class SseHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest>
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/event-stream");
             response.headers().set(HttpHeaderNames.CACHE_CONTROL, "no-cache");
             response.headers().set(HttpHeaderNames.CONNECTION, "keep-alive");
+            response.headers().set(HttpHeaderNames.TRANSFER_ENCODING, HttpHeaderValues.CHUNKED);
 
-            ctx.writeAndFlush(response);
+            ctx.write(response);
+            ctx.flush();
 
-            SseConnectionManager.registerConnection(traceId, ctx.channel(), userId);
+            LOGGER.info("register connection with traceId {}", traceId);
+            System.out.println("2. register connection with traceId: " + traceId);
+            SseConnectionManager.registerConnection(traceId, ch);
         }
     }
 }

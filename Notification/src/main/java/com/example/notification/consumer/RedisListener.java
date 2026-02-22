@@ -51,7 +51,7 @@ public class RedisListener implements Runnable {
                     String payload = msg.getBody().get("userId");
 
                     LOGGER.info("receive deque message from schedule service with traceId {}", traceId);
-                    System.out.println("receive deque message from schedule service with traceId: " + traceId);
+                    System.out.println("3. receive deque message from schedule service with traceId: " + traceId);
                     boolean success = NotificationDispatcher.send(traceId, payload);
 
                     if (success) {

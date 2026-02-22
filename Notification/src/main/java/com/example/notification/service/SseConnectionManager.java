@@ -1,8 +1,11 @@
 package com.example.notification.service;
 
+import io.netty.channel.Channel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import io.netty.channel.Channel;
 
 public class SseConnectionManager {
 
@@ -10,10 +13,17 @@ public class SseConnectionManager {
     // TODO: why concurrent hashmap
     private static final ConcurrentHashMap<String, Object> sessions = new ConcurrentHashMap<>();
 
-    public static void registerConnection(String traceId, Channel ch, String userId) {
-        sessions.put(traceId, ch);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(SseConnectionManager.class);
 
+    public static void registerConnection(String traceId, Channel ch) {
+        sessions.put(traceId, ch);
+
+        long start = System.currentTimeMillis();
+        ch.closeFuture().addListener(f -> {
+            long duration = System.currentTimeMillis() - start;
+            System.out.println("SSE closed traceId={} after {} ms: " +  traceId + ", "+ duration);
+        });
+    }
     public static void registerEvent(String traceId, String status) {
         sessions.put(traceId, status);
     }
