@@ -5,6 +5,8 @@ import com.example.authentication.request.PaymentRequest;
 import com.example.grpc.booking.*;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EventService {
+
+    private static final Logger LOGGER = LogManager.getLogger(EventService.class);
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -67,6 +71,8 @@ public class EventService {
                     .setEventId(eventId)
                     .build();
 
+            LOGGER.info("send getZonesByEvent api with eventId {}", eventId);
+
             // Call gRPC
             GrpcZonesResponse grpcResponse = blockingStub.getZonesByEvent(request);
 
@@ -81,6 +87,7 @@ public class EventService {
                     })
                     .toList();
 
+            responseMap.put("status", "SUCCESS");
             responseMap.put("success", true);
             responseMap.put("zones", zoneList);
 

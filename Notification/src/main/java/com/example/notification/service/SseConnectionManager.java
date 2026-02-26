@@ -17,12 +17,6 @@ public class SseConnectionManager {
 
     public static void registerConnection(String traceId, Channel ch) {
         sessions.put(traceId, ch);
-
-        long start = System.currentTimeMillis();
-        ch.closeFuture().addListener(f -> {
-            long duration = System.currentTimeMillis() - start;
-            System.out.println("SSE closed traceId={} after {} ms: " +  traceId + ", "+ duration);
-        });
     }
     public static void registerEvent(String traceId, String status) {
         sessions.put(traceId, status);
