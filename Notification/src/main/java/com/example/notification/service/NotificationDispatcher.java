@@ -30,6 +30,8 @@ public class NotificationDispatcher {
 
             ch.writeAndFlush(buf);
 
+            //TODO: remove element in connection map
+
             return true;
         } else {
             SseConnectionManager.registerEvent(traceId, "READY");

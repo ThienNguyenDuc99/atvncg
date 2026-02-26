@@ -38,7 +38,7 @@ public class SseHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 
             ctx.write(response);
 
-            ch.writeAndFlush(SseEncoder.event("booking-ready", userId));
+            ctx.writeAndFlush(SseEncoder.event("booking-ready", userId));
 //            ctx.writeAndFlush(new DefaultHttpContent(
 //                    Unpooled.copiedBuffer(": connected\n\n", CharsetUtil.UTF_8)
 //            ));
@@ -51,6 +51,8 @@ public class SseHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest>
                 long duration = System.currentTimeMillis() - start;
                 System.out.println("SSE closed traceId={} after {} ms: " +  traceId + ", "+ duration);
             });
+
+            //TODO: remove element in connection map
         } else {
             HttpResponse response = new DefaultHttpResponse(
                     HttpVersion.HTTP_1_1,
