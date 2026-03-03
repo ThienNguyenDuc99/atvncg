@@ -17,7 +17,7 @@ public class BasicSimulation extends Simulation {
             .contentTypeHeader("application/json");
 
     FeederBuilder<String> userFeeder =
-            csv("users_1.csv").circular();
+            csv("users_50k.csv").circular();
 
     ScenarioBuilder scn = scenario("Full Flow SSE Test")
 
@@ -92,7 +92,7 @@ public class BasicSimulation extends Simulation {
                                             "&traceId=" + session.getString("traceId") +
                                             "&userId=" + session.getString("realUserId")
                             )
-                            .await(30)
+                            .await(120)
                             .on(
                                     sse.checkMessage("check1")
                                             .check(substring("data"))
@@ -117,7 +117,7 @@ public class BasicSimulation extends Simulation {
     {
         setUp(
                 scn.injectOpen(
-                        rampUsers(1).during(30)   // test nhỏ trước
+                        rampUsers(10000).during(1000)   // test nhỏ trước
                 )
         ).protocols(httpProtocol);
     }
