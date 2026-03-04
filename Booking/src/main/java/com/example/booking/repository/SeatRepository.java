@@ -17,7 +17,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     @Modifying
     @Query(
             value = "UPDATE atvncg_business.seats " +
-                    "SET status = 'LOCKED', " +
+                    "SET status = 'BOOKED', " +
                     "expire_time = NOW() + INTERVAL '1 minute', updated_at = CURRENT_TIMESTAMP " +
                     "WHERE id = :seatId",
             nativeQuery = true
@@ -52,7 +52,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 
     @Modifying
     @Query("UPDATE Seat s SET s.status = :status, s.orderId = :orderId, " +
-            "s.updatedAt = CURRENT_TIMESTAMP, s.updatedBy = :userId WHERE s.id IN :ids")
+            "s.updatedAt = CURRENT_TIMESTAMP, s.updatedBy = :userId, s.expireTime = null " +
+            "WHERE s.id IN :ids")
     int updateStatusByIds(@Param("ids") List<Long> ids,
                           @Param("status") String status,
                           @Param("orderId") Long orderId,

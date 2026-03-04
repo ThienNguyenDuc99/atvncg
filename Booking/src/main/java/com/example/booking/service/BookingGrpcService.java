@@ -305,6 +305,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
 
         // Lấy danh sách events từ DB
         List<Event> events = eventRepository.findAll();
+        LOGGER.info("Receive getAllEvents api from API gateway");
 
         // Build response cho gRPC
         GrpcEventsResponse.Builder response = GrpcEventsResponse.newBuilder();
@@ -329,6 +330,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
     @Override
     public void getZonesByEvent(GrpcZonesRequest request,
                          StreamObserver<GrpcZonesResponse> responseObserver) {
+        LOGGER.info("Receive getZonesByEvent api from API gateway with request {}", request);
 
         long eventId = request.getEventId();
 
