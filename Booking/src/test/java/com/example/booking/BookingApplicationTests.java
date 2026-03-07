@@ -4,6 +4,10 @@ import com.example.booking.service.BookingGrpcService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.PessimisticLockingFailureException;
+import org.springframework.dao.TransientDataAccessException;
 
 @SpringBootTest
 class BookingApplicationTests {
@@ -16,15 +20,32 @@ class BookingApplicationTests {
 
         Runnable task1 = () -> {
             try {
-                int result = bookingService.getResult1(1L, "Thread-1");
-                System.out.println("Thread-1 result = " + result);
+                try {
+                    System.out.println("-------Thread-1 start-------");
+                    int result = bookingService.getResult1(7L, 1L, "Thread-1");
+                    System.out.println("-------Thread-1 result-------" + result);
+                } catch (CannotAcquireLockException  ex) {
+                    System.out.println("Thread-1 retry due to serialization conflict");
+                }
+
+//                System.out.println("-------Thread-1 start-------");
+//                int result = bookingService.getResult1(3L, "Thread-1");
+//                System.out.println("-------Thread-1 result = " + result);
             } catch (Exception e) { e.printStackTrace(); }
         };
 
         Runnable task2 = () -> {
             try {
-                int result = bookingService.getResult1(1L, "Thread-2");
-                System.out.println("Thread-2 result = " + result);
+                try {
+                    System.out.println("-------Thread-2 start-------");
+                    int result = bookingService.getResult1(7L, 1L, "Thread-2");
+                    System.out.println("-------Thread-2 result-------" + result);
+                } catch (CannotAcquireLockException  ex) {
+                    System.out.println("Thread-2 retry due to serialization conflict");
+                }
+//                System.out.println("-------Thread-2 start-------");
+//                int result = bookingService.getResult1(3L, "Thread-2");
+//                System.out.println("-------Thread-2 result = " + result);
             } catch (Exception e) { e.printStackTrace(); }
         };
 

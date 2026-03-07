@@ -59,7 +59,7 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         int result = 0;
         try {
             for (Long seatId : seatIdsList) {
-                result = getResult(seatId, userId, "Main-Thread");
+                result = getResult1(seatId, userId, "Main-Thread");
             }
         } catch (Exception e) {
             // Log error
@@ -121,26 +121,13 @@ public class BookingGrpcService extends BookingServiceGrpc.BookingServiceImplBas
         }
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public int getResult1(Long seatId, String thread) {
-        try {
-            int result = seatRepository.bookSeat1(seatId);
-            LOGGER.info(thread + " booked seat " + seatId
-                    + " result = " + result + " at " + LocalDateTime.now()); // log check
-            return result;
-        } catch (CannotAcquireLockException ex) {
-            // Concurrency conflict: Postgres 40001
-            LOGGER.error(thread + " FAILED due to concurrency lock (40001)");
-            return 0;
-        }
-        catch (DataIntegrityViolationException ex) {
-            LOGGER.error(thread + " FAILED due to constraint violation");
-            return 0;
-        }
-        catch (Exception ex) {
-            LOGGER.error(thread + " FAILED due to unexpected error: " + ex.getMessage());
-            return 0;
-        }
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public int getResult1(Long seatId,Long userId, String thread) {
+        int result = seatRepository.bookSeat1(seatId);
+        LocalDateTime now = LocalDateTime.now();
+        LOGGER.info(thread + " BOOKED SEAT " + seatId
+                + " RESULT = " + result + " AT " + now + " WITH " + userId); // log check
+        return result;
     }
 
     @Override
