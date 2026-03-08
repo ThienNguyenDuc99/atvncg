@@ -43,3 +43,4 @@ spring:
         key: request_stream
         group: api_gateway_group
         consumer: api_gateway_1
+

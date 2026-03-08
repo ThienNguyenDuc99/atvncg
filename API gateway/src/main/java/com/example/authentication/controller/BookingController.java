@@ -5,9 +5,11 @@ import com.example.authentication.request.OrderRequest;
 import com.example.authentication.request.PaymentRequest;
 import com.example.authentication.security.SecurityUser;
 import com.example.authentication.service.*;
+import com.example.authentication.utils.SeatAvailabilityCache;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,10 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.UUID;
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/business")
@@ -39,6 +41,12 @@ public class BookingController {
 
     @Autowired
     private RequestTakerService requestTakerService;
+
+    @Autowired
+    private SeatAvailabilityCache seatAvailabilityCache;
+
+    @Value("${schedule.config}")
+    private String isSchedule;
 
     private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(BookingService.class);
 
@@ -95,8 +103,8 @@ public class BookingController {
 //        }
 //    }
 
-    @GetMapping("/getZonesByEvent/{eventId}")
-    public Map<String, Object> getZonesByEvent(@PathVariable Long eventId) {
+    @GetMapping("/getZonesByEvent/{eventId}/{autoPassConfig}")
+    public Map<String, Object> getZonesByEvent(@PathVariable Long eventId, @PathVariable Boolean autoPassConfig) {
         SecurityUser user = (SecurityUser)
                 SecurityContextHolder.getContext()
                         .getAuthentication()
@@ -104,8 +112,19 @@ public class BookingController {
 
         Long userId = user.getUserId();
         String username = user.getUsername();
+
+        // If no seats are available in the cache, short-circuit with FAILURE status
+        int availableSeats = seatAvailabilityCache.getAvailableSeats();
+        if (availableSeats == 0) {
+            Map<String, Object> failure = new HashMap<>();
+            failure.put("status", "FAILURE");
+            failure.put("success", false);
+            failure.put("message", "No available seats");
+            failure.put("availableSeats", availableSeats);
+            return ResponseEntity.ok(failure).getBody();
+        }
         // TODO: using config in this case
-        if (1 == 1) {
+        if (Objects.equals(isSchedule , "true") && !autoPassConfig) {
             String traceId = UUID.randomUUID().toString() + "-" + (int)(Math.random() * 10000);
             return ResponseEntity.ok(requestTakerService
                     .sendQueue(userId, username, eventId, traceId)).getBody();

@@ -43,7 +43,7 @@ public class BookingService {
         if (result.get("status") == "SUCCESS") {
             LOGGER.info("Booking SUCCESS for seats: " + request.getSeatIds() + " by user: " + request.getUserId());
         } else {
-            LOGGER.error("Booking SUCCESS for seats: " + request.getSeatIds() + " by user: " + request.getUserId());
+            LOGGER.error("Booking FAIL for seats: " + request.getSeatIds() + " by user: " + request.getUserId());
         }
         return result;
     }

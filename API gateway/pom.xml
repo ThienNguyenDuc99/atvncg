@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version> <!-- Giữ 1 version duy nhất -->
+        <version>3.5.7</version> <!-- Giữ 1 version duy nhất -->
         <relativePath/>
     </parent>
 
@@ -119,6 +119,11 @@
             <artifactId>proto-google-common-protos</artifactId>
             <version>2.29.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 

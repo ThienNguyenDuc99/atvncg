@@ -1,9 +1,16 @@
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\ApiGatewayApplication.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\config\CorsConfig.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\config\RedisConfig.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\config\SecurityConfig.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\config\SseEmitterManager.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\consumer\RedisStreamConsumer.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\consumer\RedisStreamInitializer.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\controller\AuthController.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\controller\BookingController.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\controller\SseController.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\dto\StreamRequestMessage.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\entity\User.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\repository\UserRepository.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\request\BookingRequest.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\request\LoginRequest.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\request\OrderRequest.java
@@ -14,6 +21,7 @@ D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\response\L
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\response\OrderResponse.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\response\PaymentResponse.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\response\RegisterResponse.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\security\CustomUserDetailsService.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\security\JwtAuthFilter.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\security\JwtUtil.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\security\SecurityUser.java
@@ -22,8 +30,10 @@ D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\service\Bo
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\service\EventService.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\service\OrderService.java
 D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\service\PaymentService.java
+D:\MyCode\ATVNCG\API gateway\src\main\java\com\example\authentication\service\RequestTakerService.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\grpc-java\com\example\grpc\AuthServiceGrpc.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\grpc-java\com\example\grpc\booking\BookingServiceGrpc.java
+D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\grpc-java\com\example\grpc\RequestTakerServiceGrpc.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\AuthProto.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\booking\BookingProto.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\booking\GrpcBookingRequest.java
@@ -58,6 +68,10 @@ D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\booking\GrpcZonesRequestOrBuilder.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\booking\GrpcZonesResponse.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\booking\GrpcZonesResponseOrBuilder.java
+D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\GrpcSendQueueRequest.java
+D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\GrpcSendQueueRequestOrBuilder.java
+D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\GrpcSendQueueResponse.java
+D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\GrpcSendQueueResponseOrBuilder.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\LoginRequest.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\LoginRequestOrBuilder.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\LoginResponse.java
@@ -66,3 +80,4 @@ D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\RegisterRequestOrBuilder.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\RegisterResponse.java
 D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\RegisterResponseOrBuilder.java
+D:\MyCode\ATVNCG\API gateway\target\generated-sources\protobuf\java\com\example\grpc\SendQueueProto.java

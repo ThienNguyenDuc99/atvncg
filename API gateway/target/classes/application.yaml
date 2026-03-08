@@ -9,7 +9,38 @@ grpc:
     booking-service:
       address: "static://localhost:9091"
       negotiationType: plaintext
+    request-taker-service:
+      address: "static://localhost:9093"
+      negotiationType: plaintext
 
 jwt:
   secret: "a4f6c8d1e9b203178ab45cf9126d7f98a4f6c8d1e9b203178ab45cf9126d7f9"
   expiration: 3600000
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # có thể là none / validate / update / create / create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: atvncg_business  # 👈 Thêm dòng này để đặt schema mặc định
+  data:
+    redis:
+      port: 6379
+      host: 192.168.23.130
+      timeout: 2000ms
+      stream:
+        key: request_stream
+        group: api_gateway_group
+        consumer: api_gateway_1
+

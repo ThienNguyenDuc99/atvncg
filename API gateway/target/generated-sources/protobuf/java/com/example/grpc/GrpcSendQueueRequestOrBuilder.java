@@ -30,4 +30,16 @@ public interface GrpcSendQueueRequestOrBuilder extends
    * @return The eventId.
    */
   long getEventId();
+
+  /**
+   * <code>string traceId = 4;</code>
+   * @return The traceId.
+   */
+  java.lang.String getTraceId();
+  /**
+   * <code>string traceId = 4;</code>
+   * @return The bytes for traceId.
+   */
+  com.google.protobuf.ByteString
+      getTraceIdBytes();
 }
