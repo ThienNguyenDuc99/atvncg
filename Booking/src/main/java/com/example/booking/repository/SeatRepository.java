@@ -32,7 +32,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
                     "    SET status='BOOKED', expire_time = now() + interval '1 minute',\n" +
                     "    updated_at = CURRENT_TIMESTAMP WHERE id=:seatId\n" +
                     "    AND (\n" +
-                    "                    status='AVAILABLE'\n" +
+                    "                    status='Available'\n" +
                     "                    OR (status='BOOKED' AND expire_time < now())\n" +
                     "            );",
             nativeQuery = true
