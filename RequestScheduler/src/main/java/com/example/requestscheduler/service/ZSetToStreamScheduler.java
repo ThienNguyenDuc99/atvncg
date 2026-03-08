@@ -23,7 +23,7 @@ public class ZSetToStreamScheduler {
     @Value("${scheduler.stream-key}")
     private String streamKey;
 
-    private static final int BATCH_SIZE = 200;
+    private static final int BATCH_SIZE = 500;
 
     private static final String LUA_SCRIPT = """
          local zset = KEYS[1]
@@ -71,7 +71,7 @@ public class ZSetToStreamScheduler {
     /**
      * Scheduler poll atomic
      */
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 50000)
     public void pollAtomically() {
 
         long now = System.currentTimeMillis();
