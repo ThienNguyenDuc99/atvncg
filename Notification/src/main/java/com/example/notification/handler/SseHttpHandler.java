@@ -37,14 +37,11 @@ public class SseHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest>
             setResponseHeader(response);
 
             ctx.write(response);
-
             ctx.writeAndFlush(SseEncoder.event("booking-ready", userId));
-//            ctx.writeAndFlush(new DefaultHttpContent(
-//                    Unpooled.copiedBuffer(": connected\n\n", CharsetUtil.UTF_8)
-//            ));
             ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT)
                     .addListener(ChannelFutureListener.CLOSE);
 
+            SseConnectionManager.remove(traceId);
 
             long start = System.currentTimeMillis();
             ch.closeFuture().addListener(f -> {
@@ -52,20 +49,12 @@ public class SseHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest>
                 System.out.println("SSE closed traceId={} after {} ms: " +  traceId + ", "+ duration);
             });
 
-            //TODO: remove element in connection map
         } else {
             HttpResponse response = new DefaultHttpResponse(
                     HttpVersion.HTTP_1_1,
                     HttpResponseStatus.OK);
-
             setResponseHeader(response);
-
             ctx.write(response);
-//            ctx.writeAndFlush(new DefaultHttpContent(
-//                    Unpooled.copiedBuffer(": connected\n\n", CharsetUtil.UTF_8)
-//            ));
-//            ctx.flush();
-
 
             LOGGER.info("register connection with traceId {}", traceId);
             System.out.println("2. register connection with traceId: " + traceId);

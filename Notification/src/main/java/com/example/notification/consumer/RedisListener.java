@@ -61,6 +61,7 @@ public class RedisListener implements Runnable {
                     }
                 }
 
+
             } catch (Exception e) {
                 e.printStackTrace();
 

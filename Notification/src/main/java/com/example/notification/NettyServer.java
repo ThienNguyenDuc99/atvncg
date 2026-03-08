@@ -3,6 +3,7 @@ package com.example.notification;
 import com.example.notification.consumer.RedisListener;
 import com.example.notification.handler.SseHttpHandler;
 import com.example.notification.service.PendingEventStore;
+import com.example.notification.service.SseSessionMonitor;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
@@ -19,6 +20,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 public class NettyServer {
 
     public static void main(String[] args) throws Exception {
+        SseSessionMonitor.start();
 
         // ===== Redis setup =====
         RedisClient client = RedisClient.create("redis://192.168.23.130:6379");
